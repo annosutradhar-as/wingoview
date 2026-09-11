@@ -972,3 +972,56 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Period Number এবং Next Period অটো-ফিল করার স্ক্রিপ্ট
+  document.addEventListener("click", function(event) {
+    let target = event.target;
+    let periodValue = "";
+
+    // ১. যদি ডানপাশের "Next Period" বা তার নম্বরটিতে ক্লিক করা হয়
+    let nextPeriodContainer = target.closest("div, p, span, td");
+    if (nextPeriodContainer && nextPeriodContainer.innerText.includes("Next Period")) {
+      // টেক্সট থেকে শুধু নম্বরটি (ডিজিট) আলাদা করা
+      let matches = nextPeriodContainer.innerText.match(/\d+/);
+      if (matches) periodValue = matches[0];
+    } 
+    // সরাসরি নম্বরে ক্লিক করলে
+    else if (/^\d{10,}$/.test(target.innerText.trim())) {
+      periodValue = target.innerText.trim();
+    }
+
+    // ২. যদি গেম টেবিলের Period কলামের সেলে ক্লিক করা হয়
+    if (!periodValue) {
+      let cell = target.closest("td");
+      if (cell) {
+        let colIndex = cell.cellIndex;
+        let table = cell.closest("table");
+        
+        if (table && table.rows[0]) {
+          let headerText = table.rows[0].cells[colIndex]?.innerText.toLowerCase() || "";
+          
+          if (headerText.includes("period")) {
+            periodValue = cell.innerText.replace(/traded/gi, '').trim();
+          }
+        }
+      }
+    }
+
+    // ৩. ইনপুট ফিল্ডগুলোতে অটো-ফিল করা
+    if (periodValue) {
+      // বামপাশের উপরের Period Input Field
+      let sidebarInput = document.getElementById("periodInput");
+      if (sidebarInput) sidebarInput.value = periodValue;
+
+      // বামপাশের নিচের Demo Balance Trade Period Input Field
+      let tradeInput = document.getElementById("tradePeriodInput");
+      if (tradeInput) tradeInput.value = periodValue;
+
+      // ক্লিক করার হালকা অ্যানিমেশন এফেক্ট
+      target.style.transition = "opacity 0.15s ease";
+      target.style.opacity = "0.5";
+      setTimeout(() => {
+        target.style.opacity = "1";
+      }, 150);
+    }
+  });
