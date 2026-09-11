@@ -178,44 +178,6 @@
     </div>
 
 </div>
-<script>
-  // Period Number অটো-ফিল করার স্ক্রিপ্ট
-  document.addEventListener("click", function(event) {
-    // টেবিলে ক্লিক করা এলিমেন্ট বা তার প্যারেন্ট খোঁজা
-    let cell = event.target.closest("td");
-    if (!cell) return;
-
-    // টেবিলের হেডার থেকে কলামের ইনডেক্স বা পজিশন চেক করা
-    let colIndex = cell.cellIndex;
-    let table = cell.closest("table");
-    
-    if (table && table.rows[0]) {
-      let headerText = table.rows[0].cells[colIndex]?.innerText.toLowerCase() || "";
-      
-      // যদি ক্লিক করা কলামটি Period কলাম হয়
-      if (headerText.includes("period")) {
-        // সেল থেকে শুধু সংখ্যাটি নেওয়া (Traded লেখা থাকলে তা বাদ দিয়ে)
-        let periodValue = cell.innerText.replace(/traded/gi, '').trim();
-
-        // 1. Sidebar Period Input Field
-        let sidebarInput = document.getElementById("periodInput");
-        if (sidebarInput) sidebarInput.value = periodValue;
-
-        // 2. Demo Balance Trade Period Input Field
-        let tradeInput = document.getElementById("tradePeriodInput");
-        if (tradeInput) tradeInput.value = periodValue;
-
-        // ক্লিক করলে হালকা এনিমেশন এফেক্ট
-        cell.style.transition = "background-color 0.2s";
-        let originalBg = cell.style.backgroundColor;
-        cell.style.backgroundColor = "rgba(37, 99, 235, 0.2)";
-        setTimeout(() => {
-          cell.style.backgroundColor = originalBg;
-        }, 200);
-      }
-    }
-  });
-</script>
 	<script src="script.js"></script>
 	<script src="analysistools.js"></script>
 	<script src="balance.js"></script>	
