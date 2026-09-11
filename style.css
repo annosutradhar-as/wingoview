@@ -1,0 +1,928 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f4f7f9;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    color: #333;
+}
+
+/* Overall Grid Layout */
+.dashboard-container {
+    display: grid;
+    grid-template-columns: 280px 1fr 280px;
+    gap: 10px;
+    height: 100vh;
+    height: 100dvh;
+    padding: 10px;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+/* ================= TOP ALIGNED HEADER CONTROLS ================= */
+
+.top-left-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+    height: 42px;
+}
+
+.btn-control {
+    height: 100%;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+#startBtn { background: #2e7d32; }
+#stopBtn { background: #d32f2f; }
+.btn-control:hover, .btn-action:hover { opacity: 0.9; }
+
+.timer-box {
+    color: #222;
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #ccc;
+    border-radius: 18px;
+}
+
+.top-right-controls {
+    display: grid;
+    grid-template-columns: 1fr 65px 1fr;
+    gap: 6px;
+    height: 42px;
+}
+
+.btn-action {
+    height: 100%;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+#downloadBtn { background: #2563eb; }
+#clearBtn { background: #ea580c; }
+
+.saved-counter-wrap {
+    position: relative;
+    height: 100%;
+}
+
+.saved-counter {
+    background: #ffffff;
+    color: #0f172a;
+    font-size: 20px;
+    font-weight: bold;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #cbd5e1;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.saved-counter-wrap:hover::after {
+    content: "Total Data Count";
+    position: absolute;
+    bottom: -32px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e293b;
+    color: #fff;
+    padding: 4px 8px;
+    font-size: 11px;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 100;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* ================= PERIOD INPUT & LIST ================= */
+
+.period-input-section {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-group {
+    display: flex;
+    gap: 6px;
+}
+
+.input-group input {
+    flex: 1;
+    padding: 6px 10px;
+    font-size: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    outline: none;
+}
+
+.input-group input:focus {
+    border-color: #2563eb;
+}
+
+.input-group button {
+    padding: 6px 14px;
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.input-group button:hover {
+    background: #1d4ed8;
+}
+
+.period-list-container {
+    max-height: 120px;
+    overflow-y: auto;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    background: #f8fafc;
+}
+
+.period-list-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.period-list-container li {
+    padding: 5px 8px;
+    font-size: 12px;
+    font-family: monospace;
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.period-list-container li:last-child {
+    border-bottom: none;
+}
+
+.badge-tag {
+    background: #2563eb;
+    color: #fff;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: bold;
+    margin-right: 4px;
+}
+
+.delete-btn {
+    color: #ef4444;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 0 4px;
+    border: none;
+    background: none;
+    line-height: 1;
+}
+
+.delete-btn:hover {
+    color: #b91c1c;
+}
+
+.traded-bubble {
+    background: #2563eb;
+    color: #fff;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 12px;
+    font-weight: bold;
+}
+
+/* ================= SECTION BLOCKS & DRAWING TOOLS ================= */
+
+.analysis-section, .stats-summary-card {
+    flex: 1;
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.section-header {
+    font-size: 14px;
+    font-weight: bold;
+    color: #1e293b;
+    border-bottom: 2px solid #2563eb;
+    padding-bottom: 6px;
+}
+
+.drawing-tools-area {
+    flex: 1;
+    min-height: 120px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px;
+}
+
+.tool-btn {
+    width: 100%;
+    padding: 8px 10px;
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 12px;
+    color: #334155;
+    transition: all 0.2s ease;
+}
+
+.tool-btn:hover, .ctrl-btn:hover {
+    background-color: #e2e8f0;
+}
+
+.tool-btn.active {
+    background-color: #2563eb;
+    color: #ffffff;
+    border-color: #1d4ed8;
+}
+
+.drawing-controls {
+    display: flex;
+    gap: 5px;
+    margin-top: 4px;
+}
+
+.ctrl-btn {
+    flex: 1;
+    padding: 6px 4px;
+    font-size: 11px;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    background: #ffffff;
+    cursor: pointer;
+    font-weight: bold;
+    color: #334155;
+}
+
+.ctrl-btn.danger {
+    color: #ef4444;
+    border-color: #fca5a5;
+}
+
+.ctrl-btn.danger:hover {
+    background: #fef2f2;
+}
+
+/* 10-Row Selection Box Overlay */
+.drawing-range-box {
+    position: absolute;
+    border: 3px solid #ff0000;
+    pointer-events: none;
+    z-index: 15;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+body.range-tool-active table tbody tr {
+    cursor: crosshair !important;
+}
+
+/* Middle Table Area */
+.middle-section {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.table-container {
+    position: relative;
+    flex: 1;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    position: relative;
+}
+
+th {
+    position: sticky;
+    top: 0;
+    height: 42px;
+    background: #2563eb;
+    color: #ffffff;
+    padding: 0 8px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    z-index: 20;
+}
+
+td {
+    padding: 8px 6px;
+    text-align: center;
+    font-size: 13px;
+    border-bottom: 1px solid #e2e8f0;
+    color: #131414;
+}
+
+tr:nth-child(even) { background-color: #f8fafc; }
+tr:hover { background: #d4d8f5; }
+tr:nth-child(10) {
+    /* border-bottom: 5px solid #2563eb; */
+    /* box-shadow: 0px 7px 12px #d7d6d6; */
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    border-radius: 50%;
+    margin: 0 2px;
+}
+.dot.red { background: #ef4444; }
+.dot.green { background: #22c55e; }
+.dot.violet { background: #a855f7; }
+
+.chart-cell {
+    position: relative;
+    min-width: 260px;
+    height: 36px;
+    padding: 0;
+}
+
+.chart-wrap {
+    position: relative;
+    width: 260px;
+    height: 36px;
+    margin: auto;
+}
+
+.chart-points {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 260px;
+    height: 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 5;
+}
+
+.chart-point {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid #cbd5e1;
+    background: transparent !important;
+    color: #333a45a6;
+    font-size: 11px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+}
+
+.chart-point.active {
+    color: #ffffff !important;
+    border: none !important;
+    z-index: 10 !important;
+}
+
+.chart-point.red { background: #ef4444 !important; }
+.chart-point.green { background: #22c55e !important; }
+.chart-point.violet { background: #a855f7 !important; }
+
+#tableTrendSVG {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 3;
+}
+
+.card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 8px;
+    border-radius: 6px;
+}
+
+.card h3 {
+    font-size: 11px;
+    color: #64748b;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px 0;
+    font-size: 13px;
+}
+
+.stat-row b { color: #0f172a; font-size: 13px; }
+
+#frequency {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+}
+
+.freq-box {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    padding: 4px;
+    border-radius: 4px;
+    font-size: 11px;
+    text-align: center;
+}
+
+.mobile-toggle-btn {
+    display: none;
+    width: 100%;
+    padding: 12px;
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+/* Demo Balance & Trade Box Container */
+.demo-balance-widget {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid #dcdfe6;
+    border-radius: 6px;
+    padding: 8px;
+    margin-bottom: 15px;
+}
+
+/* Balance Header Buttons */
+.balance-controls-row {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 8px;
+}
+
+.balance-btn {
+    flex: 1;
+    padding: 6px 2px;
+    border: 1px solid #dcdfe6;
+    background-color: #f8f9fa;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.balance-btn.deposit { color: #28a745; }
+.balance-btn.withdraw { color: #dc3545; }
+.balance-btn.balance-view { 
+    background-color: #e9ecef; 
+    color: #333;
+}
+.balance-btn.balance-view.demo-active {
+    background-color: #e3f2fd;
+    color: #0d6efd;
+    border-color: #90caf9;
+}
+
+/* Trade Inputs Layout */
+.trade-input-row {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.trade-input-row input, 
+.trade-input-row select {
+    padding: 4px 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 11px;
+    min-width: 0;
+}
+
+#tradePeriodInput { 
+    flex: 2.2; 
+}
+
+#tradeSelectOption { 
+    flex: 1.2; 
+}
+
+#tradeAmountInput { 
+    flex: 0.9; 
+}
+
+.btn-trade {
+    flex: 1;
+    background: #0d6efd;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Trade List Section */
+.trade-list-header {
+    display: grid;
+    grid-template-columns: 1.2fr 0.9fr 0.9fr 1.4fr;
+    font-weight: bold;
+    font-size: 11px;
+    padding: 4px 2px;
+    background: #f1f3f5;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.trade-list-container {
+    max-height: 150px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    border: 1px solid #eee;
+}
+
+.trade-list-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.trade-item-row {
+    display: grid;
+    grid-template-columns: 1.2fr 0.9fr 0.9fr 1.4fr;
+    align-items: center;
+    font-size: 11px;
+    padding: 3px 2px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+}
+
+.col-period { font-size: 10px; font-weight: 600; color: #495057; }
+.col-entry { font-weight: bold; color: #0d6efd; }
+.col-result { font-weight: 600; color: #343a40; }
+
+.col-pl {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+}
+
+/* Badges & Indicators */
+.traded-tag-wrap {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.traded-tag {
+    background: #0d6efd;
+    color: #fff;
+    padding: 1px 5px;
+    border-radius: 8px;
+    font-size: 9px;
+    font-weight: bold;
+}
+
+.pl-mini-badge, .pl-hover-badge {
+    padding: 1px 5px;
+    border-radius: 50%;
+    color: white;
+    font-size: 9px;
+    font-weight: bold;
+}
+
+.pl-hover-badge {
+    cursor: pointer;
+    position: relative;
+}
+
+.p-bg, .badge-p { background-color: #28a745; }
+.l-bg, .badge-l { background-color: #dc3545; }
+
+.remove-btn {
+    cursor: pointer;
+    color: #ff4d4f;
+    font-weight: bold;
+    font-size: 13px;
+    padding: 0 2px;
+}
+
+.remove-btn:hover { color: #d90429; }
+
+/* Footer Stats */
+.trade-stats-footer {
+    display: flex;
+    justify-content: space-between;
+    background: #f8f9fa;
+    padding: 6px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.profit-text span { color: #28a745; }
+.loss-text span { color: #dc3545; }
+
+.pl-amount {
+    font-weight: bold;
+    font-size: 12px;
+}
+.pl-amount.profit-val, .profit-val { color: #28a745; font-weight: bold; }
+.pl-amount.loss-val, .loss-val { color: #dc3545; font-weight: bold; }
+
+/* Main Table Row P/L Badge */
+.row-pl-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    color: white;
+    font-size: 9px;
+    font-weight: bold;
+    margin-left: 3px;
+    vertical-align: middle;
+}
+
+/* Clear All Button Style */
+.btn-clear-all {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.btn-clear-all:hover {
+    background-color: #bb2d3b;
+}
+
+/* Custom Modal System */
+.custom-modal {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+.custom-modal.hidden { display: none; }
+
+.modal-content {
+    background: #1e1e2d;
+    color: #fff;
+    width: 220px;
+    border-radius: 6px;
+    padding: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    border: 1px solid #323248;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.close-modal { cursor: pointer; color: #ff4d4f; }
+
+.modal-body {
+    display: flex;
+    gap: 5px;
+}
+
+.modal-body input {
+    width: 70%;
+    padding: 4px;
+    border-radius: 3px;
+    border: 1px solid #444;
+    background: #2b2b40;
+    color: #fff;
+}
+
+.modal-body button {
+    width: 30%;
+    background: #0d6efd;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+/* Inline Popover Popup (Deposit / Withdraw) */
+.inline-popover {
+    position: absolute;
+    top: 38px;
+    z-index: 999;
+    background: #1e1e2d;
+    padding: 6px 10px;
+    border-radius: 6px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    border: 1px solid #323248;
+    white-space: nowrap;
+}
+
+.inline-popover.hidden { display: none; }
+
+.popover-body {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.popover-body input {
+    width: 65px;
+    padding: 4px 6px;
+    background: #2b2b40;
+    border: 1px solid #444;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 11px;
+    outline: none;
+}
+
+.popover-body button {
+    background: #0d6efd;
+    color: white;
+    border: none;
+    padding: 4px 9px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.close-popover {
+    color: #ff4d4f;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 1;
+    margin-left: 4px;
+    padding: 2px 4px;
+    display: inline-block;
+}
+
+.close-popover:hover {
+    color: #ff7875;
+}
+
+/* Scroll to Top Button Style */
+.middle-section {
+    position: relative; /* বাটন পজিশনিংয়ের জন্য আবশ্যক */
+}
+
+.scroll-to-top-btn {
+    position: absolute;
+    bottom: 15px;
+    right: 20px;
+    width: 38px;
+    height: 38px;
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: none; /* ডিফল্টভাবে লুকানো থাকবে */
+    align-items: center;
+    justify-content: center;
+    z-index: 99;
+    transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+.scroll-to-top-btn:hover {
+    background-color: #1d4ed8;
+    transform: scale(1.1);
+}
+
+
+/* Custom Scrollbar */
+.table-container::-webkit-scrollbar { width: 8px; }
+.table-container::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+.table-container::-webkit-scrollbar-track { background: #f1f5f9; }
+
+/* ================= MEDIA QUERIES ================= */
+
+@media (max-width: 900px) {
+    body { 
+        overflow-y: auto !important;
+        height: auto !important;
+    }
+    
+    .dashboard-container {
+        display: flex;
+        flex-direction: column;
+        height: auto !important;
+        min-height: 100vh;
+        padding: 6px;
+        gap: 8px;
+    }
+
+    .middle-section {
+        order: 1;
+        height: 90vh;
+        flex-shrink: 0;
+    }
+
+    .mobile-toggle-btn {
+        display: block;
+        order: 2;
+    }
+
+    .sidebar {
+        display: none !important;
+        order: 3;
+        height: auto !important;
+        overflow-y: visible !important;
+    }
+
+    .sidebar.active {
+        display: flex !important;
+    }
+}
+
+@media (min-width: 670px) and (max-width: 890px), (min-width: 1240px) {
+    .traded-bubble {
+        position: absolute !important; 
+    }
+}
+
+@media (min-width: 1220px) {
+    .table-container {
+        overflow-x: hidden !important;
+    }
+}
