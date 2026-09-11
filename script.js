@@ -111,52 +111,66 @@ async function fetchSupabaseRows(page = 0) {
 // ==========================================
 // DIRECT REALTIME API FETCH (WORKER.JS LOGIC)
 // ==========================================
-// worker.js
-
-addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request))
-})
-
-async function handleRequest(request) {
-  const url = new URL(request.url);
-
-  // ১. যদি রিয়ালটাইম API রিকোয়েস্ট আসে (যেমন: ?live=1)
-  if (url.searchParams.get('live') === '1') {
-    const targetApiUrl = `https://draw.ar-lottery01.com/WinGo/WinGo_30S/GetHistoryIssuePage.json?pageSize=15&pageNo=1&ts=${Date.now()}`;
-    
+async function fetchDirectApiRealtimeData() {
     try {
-      const apiResponse = await fetch(targetApiUrl, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
-          'Accept': 'application/json'
+        const liveUrl = window.location.origin + '/?live=1&t=' + Date.now();
+        const fallbackUrl = `https://draw.ar-lottery01.com/WinGo/WinGo_30S/GetHistoryIssuePage.json?pageSize=15&pageNo=1&ts=${Date.now()}`;
+        
+        let res;
+        try {
+            res = await fetch(liveUrl);
+            const contentType = res.headers.get("content-type");
+            
+            // যদি HTML ব্যাক আসে তবে জোরপূর্বক ফ্যালব্যাক URL কল করবে
+            if (!res.ok || (contentType && contentType.includes("text/html"))) {
+                throw new Error("Returned HTML instead of JSON");
+            }
+        } catch(e) {
+            // ফ্যালব্যাক রিকোয়েস্ট (Direct Third-Party API)
+            res = await fetch(fallbackUrl);
         }
-      });
 
-      const data = await apiResponse.json();
+        if (!res.ok) return;
 
-      // CORS Header সহ JSON রিটার্ন
-      return new Response(JSON.stringify(data), {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8',
-          'Access-Control-Allow-Origin': '*',
-          'Cache-Control': 'no-store, no-cache, must-revalidate'
+        const json = await res.json();
+        const list = json && json.data && json.data.list ? json.data.list : [];
+        if (list.length === 0) return;
+
+        let hasNewRow = false;
+
+        list.forEach((item) => {
+            const num = Number(item.number);
+            let colorVal = String(item.color || '');
+
+            if (num === 0) colorVal = 'Red, Violet';
+            else if (num === 5) colorVal = 'Green, Violet';
+            else if ([1, 3, 7, 9].includes(num)) colorVal = 'Green';
+            else if ([2, 4, 6, 8].includes(num)) colorVal = 'Red';
+
+            const periodStr = String(item.issueNumber);
+            const exists = gameData.some(row => String(row.period) === periodStr);
+
+            if (!exists) {
+                const formattedRow = {
+                    period: periodStr,
+                    number: String(num),
+                    bigSmall: num >= 5 ? 'Big' : 'Small',
+                    color: colorVal
+                };
+                gameData.push(formattedRow);
+                hasNewRow = true;
+            }
+        });
+
+        if (hasNewRow) {
+            // Sort ascending by period
+            gameData.sort((a, b) => BigInt(a.period) > BigInt(b.period) ? 1 : -1);
+            updateDashboard();
         }
-      });
+
     } catch (err) {
-      return new Response(JSON.stringify({ error: "API Fetch Failed", message: err.message }), {
-        status: 500,
-        headers: { 
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*' 
-        }
-      });
+        console.warn("Direct Realtime fetch skipped/error:", err);
     }
-  }
-
-  // ২. সাধারণ পেজ ভিজিটের সময় index.html বা Static Assets রেন্ডার হবে
-  // (আপনি যদি KV Asset/HTML Serve করেন তবে নিচে সেই লজিক থাকবে)
-  return fetch(request); 
 }
 
 // ==========================================
