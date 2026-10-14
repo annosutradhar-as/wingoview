@@ -379,7 +379,7 @@ td {
 tr:nth-child(even) { background-color: #f8fafc; }
 tr:hover { background: #d4d8f5; }
 tr:nth-child(10) {
-    /* border-bottom: 5px solid #2563eb; */
+    border-bottom: 3px solid #2563eb;
     /* box-shadow: 0px 7px 12px #d7d6d6; */
 }
 
