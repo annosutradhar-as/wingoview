@@ -438,12 +438,12 @@ async function triggerReportDownload(exportData) {
     }
 
 	 #rangePrimaryPopup {
-		margin-bottom: -35px !important;
+		margin-bottom: -80px !important; /* -35px */
 		margin-left: -9px !important;
 		width: 250px !important;
 	 }
 	 #rangeColorPalettePopup {
-		 margin-bottom: -191px !important;
+		 margin-bottom: -232px !important; /* -191px */
 		 margin-left: -9px !important;
 		 width: 250px !important;
 		 height: 150px !important;
