@@ -23,6 +23,11 @@ let dragOffsetX = 0, dragOffsetY = 0;
 let activeLinePoint = null; // 'start' | 'end' handle
 let currentResizeHandle = null;
 
+// Default Colors for Rectangle and Trend Line (TradingView Style Persistence)
+let defaultTrendlineColor = "#2563eb";
+let defaultRectangleColor = "#2563eb";
+let defaultRectangleBgColor = "transparent";
+
 // Dynamic Color Palette for New Range Drawings
 const predefinedColors = [
     "#2563eb", "#ef4444", "#10b981", "#8b5cf6", 
@@ -130,7 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 y1: startY,
                                 x2: currentX,
                                 y2: currentY,
-                                borderColor: "#2563eb",
+                                borderColor: defaultTrendlineColor, // ডিফল্ট কালার ব্যবহার
                                 borderWidth: "2px",
                                 borderStyle: "solid",
                                 isPinnedToRow: false
@@ -143,10 +148,10 @@ document.addEventListener("DOMContentLoaded", () => {
                                 y: Math.min(startY, currentY),
                                 width: Math.abs(currentX - startX),
                                 height: Math.abs(currentY - startY),
-                                borderColor: "#2563eb",
+                                borderColor: defaultRectangleColor, // ডিফল্ট কালার ব্যবহার
                                 borderWidth: "2px",
                                 borderStyle: "solid",
-                                bgColor: "transparent",
+                                bgColor: defaultRectangleBgColor, // ডিফল্ট ফিল কালার ব্যবহার
                                 isPinnedToRow: false
                             };
                         }
@@ -395,15 +400,13 @@ document.addEventListener("DOMContentLoaded", () => {
 function findClickedDrawing(x, y) {
     let matchedDrawings = [];
 
-    // রিভার্স অর্ডার যাতে উপরে আঁকা অবজেক্টটি আগে প্রাধান্য পায়
     for (let i = drawingsHistory.length - 1; i >= 0; i--) {
         const d = drawingsHistory[i];
 
         if (d.type === "range") {
             const bounds = d.renderedBounds;
             if (bounds) {
-                const borderThreshold = 6; // বর্ডারের মার্জিন সীমা (pixels)
-                
+                const borderThreshold = 6;
                 const isInsideX = x >= bounds.left && x <= bounds.left + bounds.width;
                 const isInsideY = y >= bounds.top && y <= bounds.top + bounds.height;
 
@@ -416,7 +419,6 @@ function findClickedDrawing(x, y) {
                     const isBorderClick = isNearTopBorder || isNearBottomBorder || isNearLeftBorder || isNearRightBorder;
                     const isFirstRowClick = y >= bounds.top && y <= (bounds.top + (bounds.firstRowHeight || 36));
 
-                    // শুধুমাত্র Border অথবা 1st Row-তে ক্লিক হলে সিলেক্ট হবে
                     if (isBorderClick || isFirstRowClick) {
                         return d;
                     }
@@ -606,7 +608,8 @@ function renderTempRectangle(x1, y1, x2, y2) {
     if (!tempBox) {
         tempBox = document.createElement("div");
         tempBox.id = "tempDrawingBox";
-        tempBox.style.cssText = "position:absolute; pointer-events:none; border:2px dashed #2563eb; background:transparent; z-index:20;";
+        // টেম্পোরারি ড্রয়িংয়ে বর্তমান ডিফল্ট কালার ব্যবহার
+        tempBox.style.cssText = `position:absolute; pointer-events:none; border:2px dashed ${defaultRectangleColor}; background:${defaultRectangleBgColor}; z-index:20;`;
         tableContainer.appendChild(tempBox);
     }
     tempBox.style.left = Math.min(x1, x2) + "px";
@@ -622,7 +625,8 @@ function renderTempTrendline(x1, y1, x2, y2) {
         tempSvg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         tempSvg.id = "tempSvgCanvas";
         tempSvg.style.cssText = "position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:20;";
-        tempSvg.innerHTML = `<line id="tempSvgLine" stroke="#2563eb" stroke-width="2" stroke-dasharray="4" />`;
+        // ট্রেন্ডলাইনের টেম্পোরারি রঙ
+        tempSvg.innerHTML = `<line id="tempSvgLine" stroke="${defaultTrendlineColor}" stroke-width="2" stroke-dasharray="4" />`;
         tableContainer.appendChild(tempSvg);
     }
     const line = tempSvg.querySelector("#tempSvgLine");
@@ -717,7 +721,6 @@ function renderDrawings() {
                     } else top = item.y;
                 } else top = item.y;
             } else {
-                // Range টাইপ ক্যালকুলেশন
                 const allRows = Array.from(tableBody.querySelectorAll("tr"));
                 if (allRows.length === 0) return;
 
@@ -740,14 +743,13 @@ function renderDrawings() {
                 firstRowHeight = firstRect.height || 36;
             }
 
-            // বাউন্ডারি ও ১ম রো-এর উচ্চতা সেভ রাখা
             item.renderedBounds = { top, left, width, height, firstRowHeight };
 
             const box = document.createElement("div");
             box.className = "drawing-range-box drawing-item";
             box.dataset.id = item.id;
             box.style.position = "absolute";
-            box.style.pointerEvents = "none"; // ওভারলে তে ক্লিক রুকতে pointer-events none
+            box.style.pointerEvents = "none";
             box.style.boxSizing = "border-box";
             box.style.top = top + "px";
             box.style.left = left + "px";
@@ -942,11 +944,28 @@ function createPopupControlsUI() {
         });
     };
 
-    bindColorPickerWithHistory("paletteBorderColor", (d, val) => d.borderColor = val);
-    bindColorPickerWithHistory("paletteFillColor", (d, val) => d.bgColor = hexToRgba(val, 0.2));
+    // কালার পরিবর্তন করার সাথে সাথে ডিফল্ট কালার ভেরিয়েবলগুলোও আপডেট করা হলো
+    bindColorPickerWithHistory("paletteBorderColor", (d, val) => {
+        d.borderColor = val;
+        if (d.type === "trendline") defaultTrendlineColor = val;
+        if (d.type === "rectangle") defaultRectangleColor = val;
+    });
+
+    bindColorPickerWithHistory("paletteFillColor", (d, val) => {
+        const rgbaVal = hexToRgba(val, 0.2);
+        d.bgColor = rgbaVal;
+        if (d.type === "rectangle") defaultRectangleBgColor = rgbaVal;
+    });
+
     bindColorPickerWithHistory("paletteTopRowColor", (d, val) => d.topRowBg = hexToRgba(val, 0.25));
 
-    document.getElementById("paletteFillNone").addEventListener("click", () => updateActiveDrawingWithHistory(d => d.bgColor = "transparent"));
+    document.getElementById("paletteFillNone").addEventListener("click", () => {
+        updateActiveDrawingWithHistory(d => {
+            d.bgColor = "transparent";
+            if (d.type === "rectangle") defaultRectangleBgColor = "transparent";
+        });
+    });
+
     document.getElementById("paletteTopRowNone").addEventListener("click", () => updateActiveDrawingWithHistory(d => d.topRowBg = "transparent"));
     
     document.getElementById("prmRowCount").addEventListener("change", (e) => {
