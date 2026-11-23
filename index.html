@@ -17,12 +17,11 @@
     <!-- LEFT COLUMN -->
     <div class="sidebar" id="leftSidebar">
         <div class="top-left-controls">
-            <button class="btn-control" id="startBtn">Start</button>
-            <div class="timer-box" id="timerDisplay" title="Timer Cowndown">00:00</div>
-            <button class="btn-control" id="stopBtn">Stop</button>
+            <div class="brand-logo">Wingo<span>View</span></div>
+            <div class="timer-box" id="timerDisplay" title="Timer Countdown">00:00</div>
         </div>
 		
-		        <!-- Period Input Box & Scrollable List -->
+        <!-- Period Input Box & Scrollable List -->
         <div class="period-input-section">
             <div class="input-group">
                 <input type="text" id="periodInput" placeholder="Period Number">
@@ -33,64 +32,64 @@
             </div>
         </div>
 
-<!-- Demo Balance & Trading Widget -->
-<div class="demo-balance-widget" id="demoBalanceWidget">
-    <!-- Balance Header & Popover Anchor Row -->
-    <div class="balance-controls-row">
-        <button id="depositBtn" class="balance-btn deposit">Deposit</button>
-        <button id="balanceDisplayBtn" class="balance-btn balance-view" title="Main Balance">৳0.00</button>
-        <button id="withdrawBtn" class="balance-btn withdraw">Withdraw</button>
-    </div>
+        <!-- Demo Balance & Trading Widget -->
+        <div class="demo-balance-widget" id="demoBalanceWidget">
+            <!-- Balance Header & Popover Anchor Row -->
+            <div class="balance-controls-row">
+                <button id="depositBtn" class="balance-btn deposit">Deposit</button>
+                <button id="balanceDisplayBtn" class="balance-btn balance-view" title="Main Balance">৳0.00</button>
+                <button id="withdrawBtn" class="balance-btn withdraw">Withdraw</button>
+            </div>
 
-    <!-- Inline Popover Popup for Deposit/Withdraw -->
-    <div id="inlinePopover" class="inline-popover hidden">
-        <div class="popover-arrow"></div>
-        <div class="popover-body">
-            <input type="number" id="popoverAmountInput" placeholder="Amount" min="1">
-            <button id="popoverSubmitBtn">OK</button>
-            <span id="closePopoverBtn" class="close-popover">&times;</span>
+            <!-- Inline Popover Popup for Deposit/Withdraw -->
+            <div id="inlinePopover" class="inline-popover hidden">
+                <div class="popover-arrow"></div>
+                <div class="popover-body">
+                    <input type="number" id="popoverAmountInput" placeholder="Amount" min="1">
+                    <button id="popoverSubmitBtn">OK</button>
+                    <span id="closePopoverBtn" class="close-popover">&times;</span>
+                </div>
+            </div>
+
+            <!-- Trade Inputs -->
+            <div class="trade-input-row">
+                <input type="text" id="tradePeriodInput" class="allow-typing" placeholder="Period Number">
+                <select id="tradeSelectOption" class="allow-typing">
+                    <option value="">Select</option>
+                    <option value="Big">Big</option>
+                    <option value="Small">Small</option>
+                    <option value="Green">Green</option>
+                    <option value="Red">Red</option>
+                    <option value="0">0</option><option value="1">1</option><option value="2">2</option>
+                    <option value="3">3</option><option value="4">4</option><option value="5">5</option>
+                    <option value="6">6</option><option value="7">7</option><option value="8">8</option>
+                    <option value="9">9</option>
+                </select>
+                <input type="number" id="tradeAmountInput" class="allow-typing" placeholder="Amt" value="10" min="1">
+                <button id="executeTradeBtn" class="btn-trade">Trade</button>
+            </div>
+
+            <!-- Trade List Header -->
+            <div class="trade-list-header">
+                <span>Period</span>
+                <span>Entry</span>
+                <span>Result</span>
+                <span>P/L</span>
+            </div>
+
+            <!-- Trade History List -->
+            <div class="trade-list-container">
+                <ul id="tradeHistoryList"></ul>
+            </div>
+
+            <!-- Stats Footer with Clear All Button -->
+            <div class="trade-stats-footer">
+                <button id="clearAllTradesBtn" class="btn-clear-all" title="Reset All Trades & Balance">Clear All</button>
+                <div class="stat-box">Total Trade: <span id="totalTradesCount">0</span></div>
+                <div class="stat-box profit-text">Profit: <span id="totalProfitCount">0</span></div>
+                <div class="stat-box loss-text">Lose: <span id="totalLoseCount">0</span></div>
+            </div>
         </div>
-    </div>
-
-    <!-- Trade Inputs -->
-    <div class="trade-input-row">
-        <input type="text" id="tradePeriodInput" class="allow-typing" placeholder="Period Number">
-        <select id="tradeSelectOption" class="allow-typing">
-            <option value="">Select</option>
-            <option value="Big">Big</option>
-            <option value="Small">Small</option>
-            <option value="Green">Green</option>
-            <option value="Red">Red</option>
-            <option value="0">0</option><option value="1">1</option><option value="2">2</option>
-            <option value="3">3</option><option value="4">4</option><option value="5">5</option>
-            <option value="6">6</option><option value="7">7</option><option value="8">8</option>
-            <option value="9">9</option>
-        </select>
-        <input type="number" id="tradeAmountInput" class="allow-typing" placeholder="Amt" value="10" min="1">
-        <button id="executeTradeBtn" class="btn-trade">Trade</button>
-    </div>
-
-    <!-- Trade List Header (Updated Columns: Period, Entry, Result, P/L) -->
-	<div class="trade-list-header">
-		<span>Period</span>
-		<span>Entry</span>
-		<span>Result</span>
-		<span>P/L</span>
-	</div>
-
-	<!-- Trade History List -->
-	<div class="trade-list-container">
-		<ul id="tradeHistoryList"></ul>
-	</div>
-
-    <!-- Stats Footer with Clear All Button -->
-    <div class="trade-stats-footer">
-        <button id="clearAllTradesBtn" class="btn-clear-all" title="Reset All Trades & Balance">Clear All</button>
-        <div class="stat-box">Total Trade: <span id="totalTradesCount">0</span></div>
-        <div class="stat-box profit-text">Profit: <span id="totalProfitCount">0</span></div>
-        <div class="stat-box loss-text">Lose: <span id="totalLoseCount">0</span></div>
-    </div>
-</div>
 
         <!-- Analysis Tools with Drawing Controls -->
         <div class="analysis-section">
@@ -105,6 +104,14 @@
                 </div>
             </div>
         </div>
+		
+	<!-- Strategy & Prediction Section -->
+        <div class="analysis-section strategy-prediction-section" style="margin-top: 5px;">
+            <div class="card" style="margin-top: 5px; margin-bottom: 5px;">
+                <div class="stat-row"><span style="font-weight: bold;">Overall Statistics Entry:</span><b id="statsAveragePrediction" style="background: #2563eb; color: #fff; padding: 2px 7px; border-radius: 4px; cursor: pointer" onclick="window.open('build-strategy.html')" title="Click here to Build Strategy">-</b></div>
+            </div>
+            <!-- <a href="build-strategy.html" target="_blank" id="buildStrategyBtn" style="display: block; width: 100%; box-sizing: border-box; text-align: center; background-color: #2563eb; color: #ffffff; padding: 10px 12px; border-radius: 6px; font-weight: 600; font-size: 13px; text-decoration: none; border: none; cursor: pointer;">Build Strategy</a> -->
+        </div>	
     </div>
 
     <!-- MIDDLE COLUMN -->
@@ -140,45 +147,58 @@
             <div class="saved-counter-wrap">
                 <div class="saved-counter" id="savedCount">0</div>
             </div>
-
-            <button class="btn-action" id="clearBtn">Clear Data</button>
         </div>
 
         <div class="stats-summary-card">
             <div class="section-header">Statistics Overview</div>
             
             <div class="card">
-                <h3>Period Info</h3>
+                <h3>Period, Round & Trend</h3>
                 <div class="stat-row"><span>Next Period</span><b id="periodDisplay">----</b></div>
+                <div class="stat-row"><span>Round Number</span><b id="roundReminder">-</b></div>
+                <div class="stat-row"><span>Trend</span><b id="trendDisplay">-</b></div>
+                <div class="stat-row"><span>Current Streak</span><b id="currentStreakDisplay">-</b></div>
+                <div class="stat-row"><span>Streak</span><b id="maxStreakDisplay">-</b></div>
             </div>
 
-            <div class="card">
-                <h3>Round Number Reminder</h3>
-                <div class="stat-row"><span>Status</span><b id="roundReminder">-</b></div>
-            </div>
+			<div class="card">
+				<h3>Color Confirmation</h3>
+				<div class="stat-row"><span>Trend</span><b id="colorTrendDisplay">-</b></div>
+				<div class="stat-row"><span>Current Streak</span><b id="colorCurrentStreakDisplay">-</b></div>
+				<div class="stat-row"><span>Streak</span><b id="colorMaxStreakDisplay">-</b></div>
+			</div>
 
             <div class="card">
-                <h3>PN Confirmation</h3>
+                <h3>PN Calculation</h3>
                 <div class="stat-row"><span>Value</span><b id="pnValue">-</b></div>
                 <div class="stat-row"><span>Prediction</span><b id="pnResult">-</b></div>
             </div>
+			
+			<div class="card">
+                <h3>FN Calculation</h3>
+                <div class="stat-row"><span>Value</span><b id="fnValue">None</b></div>
+                <div class="stat-row"><span>Prediction</span><b id="fnResult">None</b></div>
+            </div>
 
             <div class="card">
-                <h3>L5N Confirmation</h3>
+                <h3>L5S Calculation</h3>
                 <div class="stat-row"><span>Sum Digit</span><b id="l5nValue">-</b></div>
                 <div class="stat-row"><span>Prediction</span><b id="l5nResult">-</b></div>
             </div>
 			
-			            <div class="card">
-                <h3>Reappear Confirmation</h3>
+            <div class="card">
+                <h3>Last Reappear</h3>
                 <div class="stat-row"><span>10th Rows Info</span><b id="row10Info">-</b></div>
                 <div class="stat-row"><span>Prediction</span><b id="row10Prediction">-</b></div>
             </div>
+        </div>
         </div>
     </div>
 
 </div>
 	<script src="script.js"></script>
+	<script src="statistics.js"></script>
+	<script src="download.js"></script>
 	<script src="analysistools.js"></script>
 	<script src="balance.js"></script>	
 	
